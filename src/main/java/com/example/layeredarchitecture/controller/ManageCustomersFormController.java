@@ -208,10 +208,13 @@ public class ManageCustomersFormController {
 
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
+        /*Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
         pstm.setString(1, id);
-        return pstm.executeQuery().next();
+        return pstm.executeQuery().next();*/
+
+        CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+        return customerDAO.exitCustomer(id);
     }
 
     public void btnDelete_OnAction(ActionEvent actionEvent) {
