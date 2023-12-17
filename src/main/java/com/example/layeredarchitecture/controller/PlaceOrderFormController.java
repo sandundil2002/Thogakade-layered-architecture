@@ -211,7 +211,7 @@ public class PlaceOrderFormController {
     public String generateNewOrderId() {
         try {
             OrderDAO orderDAO = new OrderDAOImpl();
-            orderDAO.generateId();
+            return orderDAO.generateId();
             /*Connection connection = DBConnection.getDbConnection().getConnection();
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
@@ -367,9 +367,11 @@ public class PlaceOrderFormController {
                     boolean isSavedOrderDetail = orderDetailsDAO.saveOrderDetail(orderDetails,orderId);
                     if (isSavedOrderDetail){
                         ItemDAO itemDAO = new ItemDAOImpl();
-                        ItemDTO item = findItem(cmbItemCode.getSelectionModel().getSelectedItem());
-                        item.setQtyOnHand(item.getQtyOnHand() - OrderDetailDTO.getQty());
-                        itemDAO.updateItemPlaceOrder(new ItemDTO());
+                        for (OrderDetailDTO detail : orderDetails){
+                            ItemDTO item = findItem(detail.getItemCode());
+                            item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
+                        }
+                        return itemDAO.updateItemPlaceOrder(new ItemDTO());
                     }
                 }
             }
