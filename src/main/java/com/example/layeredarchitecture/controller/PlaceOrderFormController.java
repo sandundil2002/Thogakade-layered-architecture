@@ -366,12 +366,12 @@ public class PlaceOrderFormController {
                     OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl();
                     boolean isSavedOrderDetail = orderDetailsDAO.saveOrderDetail(orderDetails,orderId);
                     if (isSavedOrderDetail){
-                        ItemDAO itemDAO = new ItemDAOImpl();
-                        for (OrderDetailDTO detail : orderDetails){
+                        for (OrderDetailDTO detail : orderDetails) {
                             ItemDTO item = findItem(detail.getItemCode());
                             item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
+                            ItemDAO itemDAO = new ItemDAOImpl();
+                            return itemDAO.updateItemPlaceOrder(item);
                         }
-                        return itemDAO.updateItemPlaceOrder(new ItemDTO());
                     }
                 }
             }
@@ -416,9 +416,9 @@ public class PlaceOrderFormController {
                     connection.setAutoCommit(true);
                     return false;
                 }
-            }
+            }*/
 
-            connection.commit();
+            /*connection.commit();
             connection.setAutoCommit(true);
             return true;*/
 
@@ -433,7 +433,7 @@ public class PlaceOrderFormController {
     public ItemDTO findItem(String code) {
         try {
             ItemDAO itemDAO = new ItemDAOImpl();
-            itemDAO.searchItem(code);
+            return itemDAO.searchItem(code);
 
             /*Connection connection = DBConnection.getDbConnection().getConnection();
             PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
