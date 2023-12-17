@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public class OrderDetailDTO implements Serializable {
     private String itemCode;
-    private int qty;
+    private static int qty;
     private BigDecimal unitPrice;
 
     public OrderDetailDTO() {
@@ -27,7 +27,7 @@ public class OrderDetailDTO implements Serializable {
         this.itemCode = itemCode;
     }
 
-    public int getQty() {
+    public static int getQty() {
         return qty;
     }
 
