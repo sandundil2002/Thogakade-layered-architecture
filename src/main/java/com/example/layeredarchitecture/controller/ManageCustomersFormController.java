@@ -73,7 +73,7 @@ public class ManageCustomersFormController {
             ResultSet rst = stm.executeQuery("SELECT * FROM Customer");*/
 
             CustomerDAO customerDAO = new CustomerDAOImpl();
-            ArrayList<CustomerDTO> allCustomer = customerDAO.getAllCustomer();
+            ArrayList<CustomerDTO> allCustomer = customerDAO.getAll();
 
             for (CustomerDTO dto : allCustomer){
                 tblCustomers.getItems().add(new CustomerTM(dto.getId(),dto.getName(),dto.getAddress()));
@@ -157,7 +157,7 @@ public class ManageCustomersFormController {
                 pstm.executeUpdate();*/
 
                 CustomerDAO customerDAO = new CustomerDAOImpl();
-                boolean isSaved = customerDAO.saveCustomer(new CustomerDTO(id,name,address));
+                boolean isSaved = customerDAO.save(new CustomerDTO(id,name,address));
 
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -185,7 +185,7 @@ public class ManageCustomersFormController {
 
                 CustomerDTO dto = new CustomerDTO(id,name,address);
                 CustomerDAO dao = new CustomerDAOImpl();
-                dao.updateCustomer(dto);
+                dao.update(dto);
                 tblCustomers.refresh();
 
             } catch (SQLException e) {
@@ -210,7 +210,7 @@ public class ManageCustomersFormController {
         return pstm.executeQuery().next();*/
 
         CustomerDAO customerDAO = new CustomerDAOImpl();
-        return customerDAO.exitCustomer(id);
+        return customerDAO.exit(id);
     }
 
     public void btnDelete_OnAction(ActionEvent actionEvent) {
@@ -226,7 +226,7 @@ public class ManageCustomersFormController {
             pstm.executeUpdate();*/
 
             CustomerDAO dao = new CustomerDAOImpl();
-            dao.deleteCustomer(id);
+            dao.delete(id);
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
             tblCustomers.getSelectionModel().clearSelection();

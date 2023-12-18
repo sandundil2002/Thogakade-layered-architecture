@@ -80,7 +80,7 @@ public class ManageItemsFormController {
             ResultSet rst = stm.executeQuery("SELECT * FROM Item");*/
 
             ItemDAO itemDAO = new ItemDAOImpl();
-            ArrayList<ItemDTO> allItems = itemDAO.getAllItems();
+            ArrayList<ItemDTO> allItems = itemDAO.getAll();
 
             for (ItemDTO dto : allItems){
                 tblItems.getItems().add(new ItemTM(dto.getCode(),dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand()));
@@ -146,7 +146,7 @@ public class ManageItemsFormController {
             }
 
             ItemDAO itemDAO = new ItemDAOImpl();
-            itemDAO.deleteItem(code);
+            itemDAO.delete(code);
 
             tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
             tblItems.getSelectionModel().clearSelection();
@@ -196,7 +196,7 @@ public class ManageItemsFormController {
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));*/
 
                 ItemDAO itemDAO = new ItemDAOImpl();
-                boolean isSaved = itemDAO.saveItem(new ItemDTO(code,description,unitPrice,qtyOnHand));
+                boolean isSaved = itemDAO.save(new ItemDTO(code,description,unitPrice,qtyOnHand));
 
                 if (isSaved){
                     tblItems.getItems().add(new ItemTM(code,description,unitPrice,qtyOnHand));
@@ -230,7 +230,7 @@ public class ManageItemsFormController {
 
                 ItemDTO dto = new ItemDTO(code,description,unitPrice,qtyOnHand);
                 ItemDAO dao = new ItemDAOImpl();
-                dao.updateItem(dto);
+                dao.update(dto);
                 tblItems.refresh();
 
             } catch (SQLException e) {
@@ -244,7 +244,7 @@ public class ManageItemsFormController {
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
         ItemDAO itemDAO = new ItemDAOImpl();
-        return itemDAO.exitItem(code);
+        return itemDAO.exit(code);
     }
 
     private String generateNewId() {

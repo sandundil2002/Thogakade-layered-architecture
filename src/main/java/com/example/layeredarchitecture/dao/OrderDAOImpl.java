@@ -4,6 +4,7 @@ import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.utill.SQLUtill;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class OrderDAOImpl implements OrderDAO{
     @Override
@@ -13,13 +14,38 @@ public class OrderDAOImpl implements OrderDAO{
     }
 
     @Override
+    public OrderDTO search(String newValue) throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
     public boolean checkOrderId(String oid) throws SQLException, ClassNotFoundException {
         ResultSet resultSet =  SQLUtill.sql("SELECT oid FROM `Orders` WHERE oid=?",oid);
         return resultSet.next();
     }
 
     @Override
-    public boolean saveOrder(OrderDTO dto) throws SQLException, ClassNotFoundException {
+    public ArrayList<OrderDTO> getAll() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.sql("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)",dto.getOrderId(),dto.getOrderDate(),dto.getCustomerId());
+    }
+
+    @Override
+    public boolean update(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public void delete(String id) throws SQLException, ClassNotFoundException {
+
+    }
+
+    @Override
+    public boolean exit(String id) throws SQLException, ClassNotFoundException {
+        return false;
     }
 }

@@ -5,10 +5,6 @@ import com.example.layeredarchitecture.model.OrderDTO;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public interface OrderDAO {
-    String generateId()throws SQLException, ClassNotFoundException;
-
+public interface OrderDAO extends CrudDAO<OrderDTO>{
     boolean checkOrderId(String oid) throws SQLException, ClassNotFoundException;
-
-    boolean saveOrder(OrderDTO dto) throws SQLException, ClassNotFoundException;
 }
