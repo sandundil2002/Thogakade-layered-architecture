@@ -4,6 +4,7 @@ import com.example.layeredarchitecture.dao.*;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
@@ -34,6 +35,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PlaceOrderFormController {
+    OrderDAO orderDAO = new OrderDAOImpl();
+
+    OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl();
+
+    ItemDAO itemDAO = new ItemDAOImpl();
 
     public AnchorPane root;
     public JFXButton btnPlaceOrder;
@@ -329,7 +335,7 @@ public class PlaceOrderFormController {
 
     public void btnPlaceOrder_OnAction(ActionEvent actionEvent) {
         boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
-                tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
+                tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId,tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
         if (b) {
             new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
@@ -348,10 +354,21 @@ public class PlaceOrderFormController {
 
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) {
         /*Transaction*/
-        //Connection connection = null;
+        Connection connection = null;
         try {
-            OrderDAO orderDAO = new OrderDAOImpl();
-            boolean isExits = orderDAO.checkOrderId(orderId);
+            connection= DBConnection.getDbConnection().getConnection();
+
+            //Check order id already exist or not
+
+            boolean b1 = orderDAO.checkOrderId(orderId);
+            /*if order id already exist*/
+            if (b1) {
+                return false;
+            }
+
+            connection.setAutoCommit(false);
+            //OrderDAO orderDAO = new OrderDAOImpl();
+            //boolean isExits = orderDAO.checkOrderId(orderId);
             /*connection = DBConnection.getDbConnection().getConnection();
             PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
             stm.setString(1, orderId);*/
@@ -359,8 +376,14 @@ public class PlaceOrderFormController {
             /*if (stm.executeQuery().next()) {
 
             }*/
+            boolean b2 = orderDAO.saveOrder(new OrderDTO(orderId, orderDate, customerId));
 
-            if (!isExits){
+            if (!b2) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                return false;
+            }
+            /*if (!isExits){
                 boolean isSavedOrder = orderDAO.saveOrder(orderId,orderDate,customerId);
                 if (isSavedOrder){
                     OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl();
@@ -374,7 +397,7 @@ public class PlaceOrderFormController {
                         }
                     }
                 }
-            }
+            }*/
             /*connection.setAutoCommit(false);
             stm = connection.prepareStatement("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)");
             stm.setString(1, orderId);
@@ -386,6 +409,32 @@ public class PlaceOrderFormController {
                 connection.setAutoCommit(true);
                 return false;
             }*/
+
+            for (OrderDetailDTO detail : orderDetails) {
+                boolean b3 = orderDetailsDAO.saveOrderDetail(detail);
+                if (!b3) {
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                    return false;
+                }
+
+                //Search & Update Item
+                ItemDTO item = findItem(detail.getItemCode());
+                item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
+
+                //update item
+                boolean b = itemDAO.updateItem(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
+
+                if (!b) {
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                    return false;
+                }
+            }
+
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
 
             /*stm = connection.prepareStatement("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)");
 
