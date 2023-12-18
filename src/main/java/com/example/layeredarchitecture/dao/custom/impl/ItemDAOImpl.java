@@ -1,12 +1,13 @@
-package com.example.layeredarchitecture.dao;
+package com.example.layeredarchitecture.dao.custom.impl;
 
+import com.example.layeredarchitecture.dao.ItemDAO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.utill.SQLUtill;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ItemDAOImpl implements ItemDAO{
+public class ItemDAOImpl implements ItemDAO {
     @Override
     public ArrayList<ItemDTO> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtill.sql("SELECT * FROM Item");
@@ -16,8 +17,8 @@ public class ItemDAOImpl implements ItemDAO{
             ItemDTO itemDTO = new ItemDTO(
                     rst.getString("code"),
                     rst.getString("description"),
-                    rst.getBigDecimal("qtyOnHand"),
-                    rst.getInt("unitPrice"));
+                    rst.getInt("unitPrice"),
+                    rst.getBigDecimal("qtyOnHand"));
             allItems.add(itemDTO);
         }
         return allItems;
@@ -61,6 +62,6 @@ public class ItemDAOImpl implements ItemDAO{
     public ItemDTO search(String newValue) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtill.sql("SELECT * FROM Item WHERE code=?",newValue);
         rst.next();
-        return new ItemDTO(newValue + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+        return new ItemDTO(newValue + "", rst.getString("description"), rst.getInt("qtyOnHand"), rst.getBigDecimal("unitPrice"));
     }
 }

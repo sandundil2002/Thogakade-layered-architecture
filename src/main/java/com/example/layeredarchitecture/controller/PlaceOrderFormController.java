@@ -1,6 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.*;
+import com.example.layeredarchitecture.dao.custom.impl.*;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -32,6 +33,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PlaceOrderFormController {
+    CustomerDTO customerDAO = new CustomerDTO();
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl();
     ItemDAO itemDAO = new ItemDAOImpl();
@@ -298,6 +300,8 @@ public class PlaceOrderFormController {
 
         if (b) {
             new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
+            QueryDAO queryDAO = new QueryDAOImpl();
+            queryDAO.customerOrderDetails(customerDAO);
         } else {
             new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
         }
@@ -344,7 +348,7 @@ public class PlaceOrderFormController {
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
                 //update item
-                boolean b = itemDAO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
+                boolean b = itemDAO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getQtyOnHand(), item.getUnitPrice()));
 
                 if (!b) {
                     connection.rollback();

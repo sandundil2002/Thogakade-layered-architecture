@@ -1,12 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.CustomerDAOImpl;
 import com.example.layeredarchitecture.dao.ItemDAO;
-import com.example.layeredarchitecture.dao.ItemDAOImpl;
-import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -196,7 +192,7 @@ public class ManageItemsFormController {
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));*/
 
                 ItemDAO itemDAO = new ItemDAOImpl();
-                boolean isSaved = itemDAO.save(new ItemDTO(code,description,unitPrice,qtyOnHand));
+                boolean isSaved = itemDAO.save(new ItemDTO(code,description,qtyOnHand,unitPrice));
 
                 if (isSaved){
                     tblItems.getItems().add(new ItemTM(code,description,unitPrice,qtyOnHand));
@@ -228,7 +224,7 @@ public class ManageItemsFormController {
                 selectedItem.setUnitPrice(unitPrice);
                 tblItems.refresh();
 
-                ItemDTO dto = new ItemDTO(code,description,unitPrice,qtyOnHand);
+                ItemDTO dto = new ItemDTO(code,description,qtyOnHand,unitPrice);
                 ItemDAO dao = new ItemDAOImpl();
                 dao.update(dto);
                 tblItems.refresh();
