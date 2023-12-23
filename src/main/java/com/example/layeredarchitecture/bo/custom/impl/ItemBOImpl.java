@@ -4,6 +4,7 @@ import com.example.layeredarchitecture.bo.custom.ItemBO;
 import com.example.layeredarchitecture.bo.SuperBO;
 import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
+import com.example.layeredarchitecture.entity.Item;
 import com.example.layeredarchitecture.model.ItemDTO;
 
 import java.sql.SQLException;
@@ -13,7 +14,12 @@ public class ItemBOImpl implements ItemBO, SuperBO {
     ItemDAO itemDAO = (ItemDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.ITEM);
     @Override
     public ArrayList<ItemDTO> getAllItem() throws SQLException, ClassNotFoundException {
-        return itemDAO.getAll();
+        ArrayList<Item> items=itemDAO.getAll();
+        ArrayList<ItemDTO> itemDTOS=new ArrayList<>();
+        for (Item item:items) {
+            itemDTOS.add(new ItemDTO(item.getCode(),item.getDescription(),item.getQtyOnHand(),item.getUnitPrice()));
+        }
+        return itemDTOS;
     }
 
     @Override
@@ -22,14 +28,13 @@ public class ItemBOImpl implements ItemBO, SuperBO {
     }
 
     @Override
-    public boolean saveItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
-        return itemDAO.save(itemDTO);
+    public boolean saveItem(ItemDTO dto) throws SQLException, ClassNotFoundException {
+        return itemDAO.save(new Item(dto.getCode(),dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand()));
     }
 
     @Override
     public boolean updateItem(ItemDTO dto) throws SQLException, ClassNotFoundException {
-        itemDAO.update(dto);
-        return false;
+        return itemDAO.update(new Item(dto.getCode(),dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand()));
     }
 
     @Override
@@ -43,7 +48,8 @@ public class ItemBOImpl implements ItemBO, SuperBO {
     }
 
     @Override
-    public ItemDTO searchItem(String newItemCode) throws SQLException, ClassNotFoundException {
-        return itemDAO.search(newItemCode);
+    public ItemDTO searchItem(String id) throws SQLException, ClassNotFoundException {
+        Item item = itemDAO.search(id);
+        return new ItemDTO(item.getCode(),item.getDescription(), item.getQtyOnHand(),item.getUnitPrice());
     }
 }

@@ -4,6 +4,8 @@ import com.example.layeredarchitecture.bo.*;
 import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
 import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.QueryDAO;
+import com.example.layeredarchitecture.entity.Customer;
+import com.example.layeredarchitecture.entity.Item;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -192,9 +194,9 @@ public class PlaceOrderFormController {
 
     private void loadAllCustomerIds() {
         try {
-            ArrayList<CustomerDTO> allCustomer = placeOrderBO.getAllCustomer();
+            ArrayList<Customer> allCustomer = placeOrderBO.getAllCustomer();
 
-            for (CustomerDTO dto : allCustomer){
+            for (Customer dto : allCustomer){
                 cmbCustomerId.getItems().add(dto.getId());
             }
 
@@ -206,7 +208,7 @@ public class PlaceOrderFormController {
     }
 
     private void loadAllItemCodes() {
-        ArrayList<ItemDTO> allItems = null;
+        ArrayList<Item> allItems = null;
         try {
             allItems = placeOrderBO.getAllItems();
         } catch (SQLException e) {
@@ -215,7 +217,7 @@ public class PlaceOrderFormController {
             throw new RuntimeException(e);
         }
 
-        for (ItemDTO dto : allItems){
+        for (Item dto : allItems){
             cmbItemCode.getItems().add(dto.getCode());
         }
     }

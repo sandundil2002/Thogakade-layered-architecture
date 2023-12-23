@@ -8,9 +8,12 @@ import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDetailsDAO;
 import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.entity.Customer;
+import com.example.layeredarchitecture.entity.Item;
+import com.example.layeredarchitecture.entity.Order;
+import com.example.layeredarchitecture.entity.OrderDetail;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,7 +37,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO, SuperBO {
             }
             connection.setAutoCommit(false);
 
-            boolean b2 = orderDAO.save(new OrderDTO(orderId, orderDate, customerId));
+            boolean b2 = orderDAO.save(new Order(orderId, orderDate, customerId));
 
             if (!b2) {
                 connection.rollback();
@@ -43,7 +46,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO, SuperBO {
             }
 
             for (OrderDetailDTO detail : orderDetails) {
-                boolean b3 = orderDetailsDAO.saveOrderDetail(detail);
+                boolean b3 = orderDetailsDAO.save(new OrderDetail(detail.getOid(),detail.getItemCode(),detail.getQty(),detail.getUnitPrice()));
                 if (!b3) {
                     connection.rollback();
                     connection.setAutoCommit(true);
@@ -53,7 +56,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO, SuperBO {
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
                 //update item
-                boolean b = itemDAO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getQtyOnHand(), item.getUnitPrice()));
+                boolean b = itemDAO.update(new Item(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
 
                 if (!b) {
                     connection.rollback();
@@ -68,7 +71,8 @@ public class PlaceOrderBOImpl implements PlaceOrderBO, SuperBO {
 
     public ItemDTO findItem(String code) {
         try {
-            return itemDAO.search(code);
+            Item item = itemDAO.search(code);
+            return new ItemDTO(item.getCode(),item.getDescription(), item.getQtyOnHand(),item.getUnitPrice());
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find the Item " + code, e);
         } catch (ClassNotFoundException e) {
@@ -79,12 +83,15 @@ public class PlaceOrderBOImpl implements PlaceOrderBO, SuperBO {
 
     @Override
     public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.search(id);
+        Customer customer=customerDAO.search(id);
+        CustomerDTO customerDTO=new CustomerDTO(customer.getId(),customer.getName(),customer.getAddress());
+        return customerDTO;
     }
 
     @Override
     public ItemDTO searchItem(String code) throws SQLException, ClassNotFoundException {
-        return itemDAO.search(code);
+        Item item = itemDAO.search(code);
+        return new ItemDTO(item.getCode(),item.getDescription(), item.getQtyOnHand(),item.getUnitPrice());
     }
 
     @Override
@@ -103,12 +110,12 @@ public class PlaceOrderBOImpl implements PlaceOrderBO, SuperBO {
     }
 
     @Override
-    public ArrayList<CustomerDTO> getAllCustomer() throws SQLException, ClassNotFoundException {
+    public ArrayList<Customer> getAllCustomer() throws SQLException, ClassNotFoundException {
         return customerDAO.getAll();
     }
 
     @Override
-    public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
+    public ArrayList<Item> getAllItems() throws SQLException, ClassNotFoundException {
         return itemDAO.getAll();
     }
 }

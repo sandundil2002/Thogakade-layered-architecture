@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.bo.custom;
 
+import com.example.layeredarchitecture.entity.Customer;
+import com.example.layeredarchitecture.entity.Item;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -22,7 +24,7 @@ public interface PlaceOrderBO {
 
     String generateOrderID()throws SQLException, ClassNotFoundException;
 
-    ArrayList<CustomerDTO> getAllCustomer()throws SQLException, ClassNotFoundException;
+    ArrayList<Customer> getAllCustomer()throws SQLException, ClassNotFoundException;
 
-    ArrayList<ItemDTO> getAllItems()throws SQLException, ClassNotFoundException;
+    ArrayList<Item> getAllItems()throws SQLException, ClassNotFoundException;
 }
