@@ -33,10 +33,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PlaceOrderFormController {
-    CustomerDTO customerDAO = new CustomerDTO();
+    CustomerDTO customerDTO = new CustomerDTO();
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl();
     ItemDAO itemDAO = new ItemDAOImpl();
+    QueryDAO queryDAO = new QueryDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
 
     public AnchorPane root;
     public JFXButton btnPlaceOrder;
@@ -175,12 +177,10 @@ public class PlaceOrderFormController {
     }
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        ItemDAO itemDAO = new ItemDAOImpl();
         return itemDAO.exit(code);
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        CustomerDAO customerDAO = new CustomerDAOImpl();
         return customerDAO.exit(id);
     }
 
@@ -300,8 +300,7 @@ public class PlaceOrderFormController {
 
         if (b) {
             new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
-            QueryDAO queryDAO = new QueryDAOImpl();
-            queryDAO.customerOrderDetails(customerDAO);
+            queryDAO.customerOrderDetails(customerDTO);
         } else {
             new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
         }
