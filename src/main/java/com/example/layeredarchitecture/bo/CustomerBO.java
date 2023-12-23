@@ -17,4 +17,6 @@ public interface CustomerBO {
     void delete(String id) throws SQLException, ClassNotFoundException;
 
     String generateId() throws SQLException, ClassNotFoundException;
+
+    CustomerDTO search(String newValue) throws SQLException, ClassNotFoundException;
 }

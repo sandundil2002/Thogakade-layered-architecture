@@ -1,5 +1,6 @@
-package com.example.layeredarchitecture.bo;
+package com.example.layeredarchitecture.dao.custom.impl;
 
+import com.example.layeredarchitecture.bo.CustomerBO;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -7,7 +8,7 @@ import com.example.layeredarchitecture.model.CustomerDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CustomerBOImpl implements CustomerBO{
+public class CustomerBOImpl implements CustomerBO {
     CustomerDAO customerDAO = new CustomerDAOImpl();
 
     @Override
@@ -38,5 +39,10 @@ public class CustomerBOImpl implements CustomerBO{
     @Override
     public String generateId() throws SQLException, ClassNotFoundException {
         return customerDAO.generateId();
+    }
+
+    @Override
+    public CustomerDTO search(String newValue) throws SQLException, ClassNotFoundException {
+        return customerDAO.search(newValue);
     }
 }
