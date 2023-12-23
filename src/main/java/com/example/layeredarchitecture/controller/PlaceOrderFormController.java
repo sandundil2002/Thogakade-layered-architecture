@@ -1,6 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.*;
+import com.example.layeredarchitecture.dao.custom.QueryDAO;
+import com.example.layeredarchitecture.dao.custom.impl.QueryDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 
 public class PlaceOrderFormController {
     CustomerDTO customerDTO = new CustomerDTO();
-    QueryBO queryBO = new QueryBOImpl();
+    QueryDAO queryDAO = new QueryDAOImpl();
     PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
 
     public AnchorPane root;
@@ -289,7 +291,7 @@ public class PlaceOrderFormController {
 
         if (b) {
             new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
-            queryBO.customerOrderDetails(customerDTO);
+            queryDAO.customerOrderDetails(customerDTO);
         } else {
             new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
         }
