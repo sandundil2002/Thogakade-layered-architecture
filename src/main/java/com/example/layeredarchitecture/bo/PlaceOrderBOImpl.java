@@ -109,5 +109,4 @@ public class PlaceOrderBOImpl implements PlaceOrderBO,SuperBO {
     public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
         return itemDAO.getAll();
     }
-
 }
