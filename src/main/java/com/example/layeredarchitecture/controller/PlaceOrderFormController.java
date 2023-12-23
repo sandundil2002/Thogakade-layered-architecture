@@ -1,9 +1,9 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.*;
+import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
 import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.QueryDAO;
-import com.example.layeredarchitecture.dao.custom.impl.QueryDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
