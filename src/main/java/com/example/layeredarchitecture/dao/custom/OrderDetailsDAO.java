@@ -6,6 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public interface OrderDetailsDAO {
+public interface OrderDetailsDAO extends SuperDAO {
     boolean saveOrderDetail(OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
 }

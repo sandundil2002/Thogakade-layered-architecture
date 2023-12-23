@@ -1,6 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.*;
+import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.QueryDAO;
 import com.example.layeredarchitecture.dao.custom.impl.QueryDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -33,8 +34,8 @@ import java.util.stream.Collectors;
 
 public class PlaceOrderFormController {
     CustomerDTO customerDTO = new CustomerDTO();
-    QueryDAO queryDAO = new QueryDAOImpl();
-    PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
+    QueryDAO queryDAO = (QueryDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.QUERY);
+    PlaceOrderBO placeOrderBO = (PlaceOrderBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PLACE_ORDER);
 
     public AnchorPane root;
     public JFXButton btnPlaceOrder;

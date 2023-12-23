@@ -1,15 +1,14 @@
 package com.example.layeredarchitecture.bo;
 
-import com.example.layeredarchitecture.bo.ItemBO;
+import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
-import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ItemBOImpl implements ItemBO {
-    ItemDAO itemDAO = new ItemDAOImpl();
+public class ItemBOImpl implements ItemBO, SuperBO {
+    ItemDAO itemDAO = (ItemDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.ITEM);
     @Override
     public ArrayList<ItemDTO> getAllItem() throws SQLException, ClassNotFoundException {
         return itemDAO.getAll();
