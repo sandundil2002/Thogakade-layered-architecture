@@ -1,19 +1,26 @@
 package com.example.layeredarchitecture.dao.custom.impl;
 
 import com.example.layeredarchitecture.bo.PlaceOrderBO;
+import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDetailsDAO;
 import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.utill.SQLUtill;
+
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlaceOrderBOImpl implements PlaceOrderBO {
+    CustomerDAO customerDAO = new CustomerDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl();
     ItemDAO itemDAO = new ItemDAOImpl();
@@ -70,4 +77,40 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
         }
         return null;
     }
+
+    @Override
+    public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
+        return customerDAO.search(id);
+    }
+
+    @Override
+    public ItemDTO searchItem(String code) throws SQLException, ClassNotFoundException {
+        return itemDAO.search(code);
+    }
+
+    @Override
+    public boolean existItem(String code) throws SQLException, ClassNotFoundException {
+        return itemDAO.exit(code);
+    }
+
+    @Override
+    public boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+        return customerDAO.exit(id);
+    }
+
+    @Override
+    public String generateOrderID() throws SQLException, ClassNotFoundException {
+        return orderDAO.generateId();
+    }
+
+    @Override
+    public ArrayList<CustomerDTO> getAllCustomer() throws SQLException, ClassNotFoundException {
+        return customerDAO.getAll();
+    }
+
+    @Override
+    public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
+        return itemDAO.getAll();
+    }
+
 }
