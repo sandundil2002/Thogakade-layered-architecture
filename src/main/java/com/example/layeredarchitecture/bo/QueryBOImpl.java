@@ -1,7 +1,8 @@
-package com.example.layeredarchitecture.dao.custom.impl;
+package com.example.layeredarchitecture.bo;
 
 import com.example.layeredarchitecture.bo.QueryBO;
 import com.example.layeredarchitecture.dao.custom.QueryDAO;
+import com.example.layeredarchitecture.dao.custom.impl.QueryDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 
 public class QueryBOImpl implements QueryBO {

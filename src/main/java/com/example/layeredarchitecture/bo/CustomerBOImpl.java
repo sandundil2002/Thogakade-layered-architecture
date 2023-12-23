@@ -1,4 +1,4 @@
-package com.example.layeredarchitecture.dao.custom.impl;
+package com.example.layeredarchitecture.bo;
 
 import com.example.layeredarchitecture.bo.CustomerBO;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;

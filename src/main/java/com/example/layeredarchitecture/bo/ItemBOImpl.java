@@ -1,7 +1,8 @@
-package com.example.layeredarchitecture.dao.custom.impl;
+package com.example.layeredarchitecture.bo;
 
 import com.example.layeredarchitecture.bo.ItemBO;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
+import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
 
 import java.sql.SQLException;
