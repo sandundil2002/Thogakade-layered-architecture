@@ -11,7 +11,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/layeredarchitecture/main-form.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("IJSE");
+        stage.setTitle("Main Form");
         stage.setScene(scene);
         stage.show();
     }
